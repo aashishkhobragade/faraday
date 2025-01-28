@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <title>Receipt Generator</title>
+</head>
+<body class="bg-gradient-to-r from-gray-100 via-gray-200 to-gray-300 text-gray-900 font-sans p-8">
+    <div class="max-w-4xl mx-auto bg-white rounded-lg shadow-xl p-8">
+        <!-- Header Section -->
+        <header class="mb-8">
+            <h1 class="text-4xl font-extrabold text-center text-gray-800 mb-2">Fraud Recovery Receipt Generator</h1>
+            <p class="text-center text-gray-600">Generate and export receipts for recovered fraud-related transactions.</p>
+        </header>
+
+        <!-- Transaction Selection Section -->
+        <section class="mb-12">
+            <h2 class="text-2xl font-bold text-gray-800 mb-6">Select Transaction</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Left Column: Transaction Details -->
+                <div class="space-y-6">
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Transaction ID:</label>
+                        <input type="text" id="transactionId" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Amount Recovered:</label>
+                        <input type="text" id="amountRecovered" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Date:</label>
+                        <input type="text" id="transactionDate" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Bank Name:</label>
+                        <input type="text" id="bankName" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Transaction Status:</label>
+                        <input type="text" id="transactionStatus" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <!-- Account Holder Details Section -->
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Account Holder Name:</label>
+                        <input type="text" id="accountHolder" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Account Number:</label>
+                        <input type="text" id="accountNumber" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">IFSC Code:</label>
+                        <input type="text" id="ifscCode" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                    <div class="space-y-2">
+                        <label class="block text-gray-700 font-semibold">Bank Address:</label>
+                        <input type="text" id="bankAddress" class="w-full p-3 border border-gray-300 rounded-lg bg-gray-50 text-gray-700 font-medium" readonly>
+                    </div>
+                </div>
+
+                <!-- Right Column: Generate Receipt Button -->
+                <div class="flex flex-col justify-start items-center space-y-6">
+                    <div class="w-full">
+                        <label class="block text-gray-700 font-semibold mb-2">Select Transaction</label>
+                        <select id="transactionSelect" class="w-full p-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-600">
+                            <option value="TXN12345|₹1,20,000|2025-01-20|Bank A|Recovered|John Doe|1234567890|IFSC1234|Bank A Address">TXN12345 - ₹1,20,000 - 2025-01-20</option>
+                            <option value="TXN67890|₹80,000|2025-01-22|Bank B|Recovered|Jane Smith|0987654321|IFSC5678|Bank B Address">TXN67890 - ₹80,000 - 2025-01-22</option>
+                            <option value="TXN54321|₹2,50,000|2025-01-25|Bank C|Recovered|Mark Lee|1122334455|IFSC9101|Bank C Address">TXN54321 - ₹2,50,000 - 2025-01-25</option>
+                        </select>
+                    </div>
+
+                    <button id="generateReceipt" class="w-full py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition duration-300">
+                        Generate Receipt
+                    </button>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // Update the text fields based on the selected transaction
+        document.getElementById('transactionSelect').addEventListener('change', function () {
+            const transactionDetails = this.value.split('|');
+            document.getElementById('transactionId').value = transactionDetails[0];
+            document.getElementById('amountRecovered').value = transactionDetails[1];
+            document.getElementById('transactionDate').value = transactionDetails[2];
+            document.getElementById('bankName').value = transactionDetails[3];
+            document.getElementById('transactionStatus').value = transactionDetails[4];
+            document.getElementById('accountHolder').value = transactionDetails[5];
+            document.getElementById('accountNumber').value = transactionDetails[6];
+            document.getElementById('ifscCode').value = transactionDetails[7];
+            document.getElementById('bankAddress').value = transactionDetails[8];
+        });
+
+        // Generate the receipt as a PDF
+        document.getElementById('generateReceipt').addEventListener('click', function () {
+            const { jsPDF } = window.jspdf;
+            const doc = new jsPDF();
+
+            // Get selected transaction details
+            const transactionId = document.getElementById('transactionId').value;
+            const amount = document.getElementById('amountRecovered').value;
+            const date = document.getElementById('transactionDate').value;
+            const bankName = document.getElementById('bankName').value;
+            const status = document.getElementById('transactionStatus').value;
+            const accountHolder = document.getElementById('accountHolder').value;
+            const accountNumber = document.getElementById('accountNumber').value;
+            const ifscCode = document.getElementById('ifscCode').value;
+            const bankAddress = document.getElementById('bankAddress').value;
+
+            // Add content to the PDF
+            doc.setFontSize(16);
+            doc.text("Fraud Recovery Receipt", 20, 20);
+            doc.setFontSize(12);
+            doc.text(`Transaction ID: ${transactionId}`, 20, 40);
+            doc.text(`Amount Recovered: ${amount}`, 20, 50);
+            doc.text(`Date: ${date}`, 20, 60);
+            doc.text(`Bank: ${bankName}`, 20, 70);
+            doc.text(`Status: ${status}`, 20, 80);
+            doc.text(`Account Holder: ${accountHolder}`, 20, 90);
+            doc.text(`Account Number: ${accountNumber}`, 20, 100);
+            doc.text(`IFSC Code: ${ifscCode}`, 20, 110);
+            doc.text(`Bank Address: ${bankAddress}`, 20, 120);
+            doc.text("Bank AI System", 20, 130);
+            doc.text("Thank you for using our service.", 20, 140);
+
+            // Save the PDF as a file
+            doc.save(`receipt_${transactionId}.pdf`);
+        });
+    </script>
+</body>
+</html>

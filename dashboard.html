@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        function showDetails(transactionId, date, amount, cardType, status, location, ip, device, merchant) {
+            document.getElementById('detailContainer').classList.remove('hidden');
+            document.getElementById('detailTransactionId').textContent = transactionId;
+            document.getElementById('detailDate').textContent = date;
+            document.getElementById('detailAmount').textContent = amount;
+            document.getElementById('detailCardType').textContent = cardType;
+            document.getElementById('detailStatus').textContent = status;
+            document.getElementById('detailLocation').textContent = location;
+            document.getElementById('detailIp').textContent = ip;
+            document.getElementById('detailDevice').textContent = device;
+            document.getElementById('detailMerchant').textContent = merchant;
+        }
+        function closeDetails() {
+            document.getElementById('detailContainer').classList.add('hidden');
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-r from-blue-100 to-blue-300 text-gray-900 font-sans p-8">
+    <div class="bg-white rounded-lg shadow-lg p-6">
+        <h2 class="text-3xl font-bold mb-6">Fraud Detection Overview</h2>
+        <p class="text-gray-600">Real-time monitoring and analysis of transaction fraud.</p>
+        
+        <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+            <div class="p-6 bg-gradient-to-br from-green-200 to-green-400 shadow rounded-lg">
+                <p class="text-sm text-gray-700">Total Transactions</p>
+                <h3 class="text-2xl font-bold">₹2,543,895</h3>
+                <span class="text-green-800 text-sm">+14%</span>
+            </div>
+            <div class="p-6 bg-gradient-to-br from-red-200 to-red-400 shadow rounded-lg">
+                <p class="text-sm text-gray-700">Fraudulent Amount</p>
+                <h3 class="text-2xl font-bold text-red-800">₹85,432</h3>
+                <span class="text-red-800 text-sm">+2.5%</span>
+            </div>
+            <div class="p-6 bg-gradient-to-br from-blue-200 to-blue-400 shadow rounded-lg">
+                <p class="text-sm text-gray-700">Recovered Amount</p>
+                <h3 class="text-2xl font-bold text-blue-800">₹62,891</h3>
+                <span class="text-blue-800 text-sm">73.6%</span>
+            </div>
+            <div class="p-6 bg-gradient-to-br from-yellow-200 to-yellow-400 shadow rounded-lg">
+                <p class="text-sm text-gray-700">Active Cases</p>
+                <h3 class="text-2xl font-bold">147</h3>
+                <span class="text-yellow-800 text-sm">High</span>
+            </div>
+        </div>
+
+        <div class="mt-6 bg-white p-6 shadow rounded-lg">
+            <h3 class="text-2xl font-bold mb-4">Recent Fraud Transactions</h3>
+            <table class="w-full border-collapse">
+                <thead>
+                    <tr class="bg-gray-200">
+                        <th class="p-3 text-left">TRANSACTION ID</th>
+                        <th class="p-3 text-left">DATE</th>
+                        <th class="p-3 text-left">AMOUNT</th>
+                        <th class="p-3 text-left">CARD TYPE</th>
+                        <th class="p-3 text-left">STATUS</th>
+                        <th class="p-3 text-left">ACTION</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr class="border-b hover:bg-gray-100">
+                        <td class="p-3">#TRX-5632</td>
+                        <td class="p-3">2023-10-15</td>
+                        <td class="p-3">₹1,242.00</td>
+                        <td class="p-3">Visa ****4231</td>
+                        <td class="p-3 text-red-800 font-bold">Fraudulent</td>
+                        <td class="p-3 text-blue-800 underline cursor-pointer" onclick="showDetails('#TRX-5632', '2023-10-15', '₹1,242.00', 'Visa ****4231', 'Fraudulent', 'Mumbai, India', '192.168.1.1', 'iPhone 13', 'Amazon')">View Details</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <div id="detailContainer" class="hidden fixed inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+        <div class="bg-white p-8 rounded-lg shadow-lg w-1/3">
+            <h3 class="text-2xl font-bold mb-4">Transaction Details</h3>
+            <p><strong>Transaction ID:</strong> <span id="detailTransactionId"></span></p>
+            <p><strong>Date:</strong> <span id="detailDate"></span></p>
+            <p><strong>Amount:</strong> <span id="detailAmount"></span></p>
+            <p><strong>Card Type:</strong> <span id="detailCardType"></span></p>
+            <p><strong>Status:</strong> <span id="detailStatus"></span></p>
+            <p><strong>Location:</strong> <span id="detailLocation"></span></p>
+            <p><strong>IP Address:</strong> <span id="detailIp"></span></p>
+            <p><strong>Device Used:</strong> <span id="detailDevice"></span></p>
+            <p><strong>Merchant:</strong> <span id="detailMerchant"></span></p>
+            <button class="mt-4 bg-red-800 text-white px-4 py-2 rounded" onclick="closeDetails()">Close</button>
+        </div>
+    </div>
+</body>
+</html>
